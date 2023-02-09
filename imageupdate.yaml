@@ -1,0 +1,24 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: fluxupdate
+  namespace: cluster-config
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: test-config
+    namespace: cluster-config
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: bavneetsingh@msft-test.com
+        name: Bavneet Singh
+      messageTemplate: "{{range .Updated.Images}}{{println .}}{{end}}"
+    push:
+      branch: main
+  update:
+    strategy: Setters
